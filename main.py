@@ -1,22 +1,23 @@
 from transformers import BertTokenizer, BertModel
 import torch
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request 
 
 app = Flask(__name__)
 
-@app.route('/get-similarity-score')
+@app.route('/get-similarity-score',  methods=['POST'])
 def your_endpoint():
-    
+    requestData = request.json 
+    print(requestData)
+    resumePrompt =', '.join(requestData['resumePrompt'])
+    requirementsPrompt = ', '.join(requestData['requirementsPrompt'])
     print('imported')
     model_name = 'bert-large-uncased'
     tokenizer = BertTokenizer.from_pretrained(model_name)
     model = BertModel.from_pretrained(model_name)
 
     print('encoding')
-    sentence1 = "intern"
-    sentence2 = "highly experienced"
-    inputs1 = tokenizer(sentence1, return_tensors="pt")
-    inputs2 = tokenizer(sentence2, return_tensors="pt")
+    inputs1 = tokenizer(resumePrompt, return_tensors="pt")
+    inputs2 = tokenizer(requirementsPrompt, return_tensors="pt")
 
     with torch.no_grad():
         outputs1 = model(**inputs1)
