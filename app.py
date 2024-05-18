@@ -4,6 +4,11 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Hello, Flask!"
+
+
 @app.route('/get-similarity-score',  methods=['POST'])
 def your_endpoint():
     requestData = request.json 
